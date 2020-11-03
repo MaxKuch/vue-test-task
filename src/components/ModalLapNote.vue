@@ -35,18 +35,24 @@
             <div class="form-group row">
               <label for="exampleFormControlSelect1" class="col-md-2 col-form-label">Счет</label>
               <div class="col-sm-10">
-                <input v-model="score" class="form-control">
+                <input @focus="isScoreTouched = true" placeholder="и-и" v-model="score" class="form-control" :class="{'is-invalid': (!isScoreValid && isScoreTouched)}">
+                <div v-if="(!isScoreValid && isScoreTouched)" class="invalid-feedback">
+                  Пожалуйста, выставьте очки
+                </div>
               </div>
             </div>
             <div class="form-group row">
               <label for="exampleFormControlSelect1" class="col-md-2 col-form-label">Время</label>
               <div class="col-sm-10">
-                <input v-model="time" class="form-control">
+                <input @focus="isTimeTouched = true" placeholder="чч:мм" v-model="time" class="form-control" :class="{'is-invalid': (!isTimeValid && isTimeTouched)}">
+              </div>
+              <div v-if="(!isScoreValid && isScoreTouched)" class="invalid-feedback">
+                Пожалуйста, выставьте время
               </div>
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="changeNote" data-dismiss="modal">Закрыть</button>
+          <button type="button" class="btn btn-secondary" @click="changeNote">Закрыть</button>
         </div>
       </div>
     </div>
@@ -72,7 +78,11 @@ export default {
       score: null,
       time: null,
       isVideo: false,
-      videoLink: ''
+      videoLink: '',
+      isScoreValid: false,
+      isScoreTouched: false,
+      isTimeValid: false,
+      isTimeTouched: false
     }
   },
   watch: {
@@ -93,17 +103,48 @@ export default {
         }
       })
       this.selectedWinner = this.opponents[0].userId
+    },
+    score(){
+      this.validateScore()
+    },
+    time(){
+      this.validateTime()
     }
   },
   methods: {
     changeNote(){
-      this.$emit('changeNote', this.selectedWinner, this.score, this.time)
+      this.isScoreTouched = true
+      this.isTimeTouched = true
+      this.validateScore()
+      this.validateTime()
+      if(this.isTimeValid && this.isScoreValid){
+        const score = this.score.slice(0,1)+'--'+this.score.slice(-1)
+        const time = this.time.slice(0,2)+':'+this.time.slice(-2)
+        this.$emit('changeNote', this.selectedWinner, score, time)
+        $(`#${this.id}`).modal('hide')
+      }
     },
     loadVideo(){
       this.isVideo = true
       let reader  = new FileReader();
       let video = this.$refs.file.files
       this.$refs.video.src = reader.readAsDataURL(video);
+    },
+    validateScore(){
+      if(!/^[0-9].*[0-9]$/.test(this.score)){
+        this.isScoreValid = false
+      }
+      else {
+        this.isScoreValid = true
+      }
+    },
+    validateTime(){
+      if(!/^[0-9]{2}.*[0-9]{2}$/.test(this.time)){
+        this.isTimeValid = false
+      }
+      else {
+        this.isTimeValid = true
+      }
     }
   },
 }

@@ -1,6 +1,5 @@
 import contest from '../db/contest.js'
 
-
 export default {
   state: {
     ...contest
