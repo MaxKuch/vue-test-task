@@ -63,7 +63,7 @@ export default {
   watch: {
     category (newValue) {
       let self = this
-      if(category.type!='matrix') return
+      if(self.category.type!='matrix') return
       self.makeMatrix()
     }
   },

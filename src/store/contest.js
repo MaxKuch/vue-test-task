@@ -3,7 +3,7 @@ import contest from '../db/contest.js'
 
 export default {
   state: {
-    contest
+    ...contest
   },
   mutations: {
     
@@ -11,6 +11,6 @@ export default {
   actions: {
   },
   getters: {
-    getContest: state => state.contest,
+    getContest: state => state,
   }
 }

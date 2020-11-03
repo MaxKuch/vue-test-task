@@ -84,7 +84,10 @@ export default {
         this.category.nodes.athletesInfo[this.currentCell.winner], 
         this.category.nodes.athletesInfo[this.currentCell.opponent - 1]
       ].map(opponent => {
-        const name = window.users.find(user => user._id == opponent.userId).name
+        let name = ''
+        if(opponent){
+          name = window.users.find(user => user._id == opponent.userId).name
+        }
         return {
           ...opponent, name
         }

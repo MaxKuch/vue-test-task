@@ -25,16 +25,23 @@
 import CategoryTableMatrix from '@/components/CategoryTableMatrix'
 import ModalDisqualify from '@/components/ModalDisqualify'
 import ModalLapNote from '@/components/ModalLapNote'
+import { mapState } from 'vuex'
 
 export default {
   data(){
     return {
-      category: this.$store.getters.getCategory,
-      contest: this.$store.getters.getContest,
       currentUser: null,
       currentCell: null,
       currentOriginalLapIndex: null,
       currentCellIndex: null
+    }
+  },
+  computed: {
+    category(){
+      return this.$store.getters.getCategory
+    },
+    contest(){
+      return this.$store.getters.getContest
     }
   },
   methods: {
@@ -50,7 +57,7 @@ export default {
       $('#modal-lap-note').modal('show')
     },
     disqualify(userID){
-      this.$store.commit('disqualify', userId)
+      this.$store.commit('disqualify', userID)
     },
     changeNote(selectedWinner, score, time){
       this.$store.commit('updateNote', {
